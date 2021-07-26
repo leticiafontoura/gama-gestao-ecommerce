@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
+
+* {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.clientsInfo {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+}
+
+table {
+
+    width: 100%;
+}
+
+table th, td {
+    width: 200px;
+}
+
+th {
+    background-color: orange;
+}
+
+td {
+    background-color: palegoldenrod;
+    color: black;
+    padding: 10px;
+}
+
+form {
+    width: 70%;
+}
+
+form input {
+    width: 100%;
+    margin: 10px 0px;
+    padding: 10px;
+}
+
+h1 {
+    margin: 20px;
+}
+
+.backToGoTo {
+    display: block;
+    width: 30%;
+    background-color: palegoldenrod;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    transition: 0.5s;
+}
+
+.backToGoTo:hover {
+    background-color: orange;
+}
