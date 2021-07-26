@@ -7,7 +7,7 @@ Ao entrar na página inicial, o usuário escolhe se quer fazer a gestão de prod
 
 # Live website
 
-Clique [aqui](https://vinilcolablackfriday.netlify.app/) para ver a aplicação live.
+Clique [aqui](https://vinilcola-gestao-cadastros.netlify.app/) para ver a aplicação live.
 
 # Technologies
 
