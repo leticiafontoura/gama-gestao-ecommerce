@@ -1,90 +1,98 @@
-import { React, useState } from "react";
-
-const productsInfo = [];
-let id = 0;
+import { React, useState, useEffect } from "react";
 
 function Form() {
-
   const [productName, setProductName] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
+  const [productsInfo, setProductsInfo] = useState(undefined);
+  const [id, setId] = useState(0);
 
   function handleForm(e) {
     e.preventDefault();
-    let productName = document.querySelector("#productName").value;
-    let productQuantity = document.querySelector("#productQuantity").value;
-    let createTR = document.createElement("tr");
-    createTR.setAttribute("id", id);
-    let createTdId = document.createElement("td");
-    createTdId.innerHTML = id;
-    let createTdProduct = document.createElement("td");
-    createTdProduct.innerHTML = productName
-    let createTdQt = document.createElement("td");
-    createTdQt.innerHTML = productQuantity;
- 
-    let table = document.querySelector("#tableProduct");
-    table.appendChild(createTR);
-    createTR.appendChild(createTdId);
-    createTR.appendChild(createTdProduct);
-    createTR.appendChild(createTdQt);
-   
-    let productInfo = {
+
+    const productInfo = {
       id: id,
       product: productName,
-      quantitiy: productQuantity
-    }
-    id = id + 1;
-    productsInfo.push(productInfo);
-    console.log(productsInfo);
-    localStorage.setItem("Produtos: ", JSON.stringify(productsInfo))
+      quantity: productQuantity,
+    };
 
+    setId((previousId) => previousId + 1);
+    setProductsInfo((previousProductsInfo) => [
+      ...(previousProductsInfo ?? []),
+      productInfo,
+    ]);
     setProductName("");
     setProductQuantity("");
-    
-
   }
 
-    return (
-        <>
-    <form onSubmit={handleForm}>
-        
+  useEffect(() => {
+    const products = JSON.parse(localStorage.getItem("Produtos:") ?? "[]");
+    setProductsInfo(products);
+    let maxId = -1;
+    products.forEach((p) => {
+      if (p.id > maxId) {
+        maxId = p.id;
+      }
+    });
+    setId(maxId + 1);
+  }, []);
 
-  <p>
-    <input
-      required
-      type="text"
-      name="productName"
-      id="productName"
-      placeholder="Nome do produto"
-      value={productName}
-      onChange={(e) => setProductName(e.target.value)}
-    />
-  </p>
-  <p>
-    <input
-      required
-      type="number"
-      name="product"
-      id="productQuantity"
-      placeholder="quantidade"
-      value={productQuantity}
-      onChange={(e) => setProductQuantity(e.target.value)}
-    />
-  </p>
-  <p><input type="submit" id="add" value="Adicionar" /></p>
-</form>
-
-<table id="tableProduct">
-  <thead>
-      <th>ID</th>
-      <th>Produto</th>
-      <th>Quantidade</th>
-  </thead>
-  <tbody>
-
-  </tbody>
-</table>
-</>
-        )
+  useEffect(() => {
+    if (productsInfo === undefined) {
+      return;
     }
+    localStorage.setItem("Produtos:", JSON.stringify(productsInfo));
+  }, [productsInfo]);
+
+  return (
+    <>
+      <form onSubmit={handleForm}>
+        <p>
+          <input
+            required
+            type="text"
+            name="productName"
+            id="productName"
+            placeholder="Nome do produto"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+        </p>
+        <p>
+          <input
+            required
+            type="number"
+            name="product"
+            id="productQuantity"
+            placeholder="quantidade"
+            value={productQuantity}
+            onChange={(e) => setProductQuantity(e.target.value)}
+          />
+        </p>
+        <p>
+          <input type="submit" id="add" value="Adicionar" />
+        </p>
+      </form>
+
+      <table id="tableProduct">
+        <thead>
+          <th>ID</th>
+          <th>Produto</th>
+          <th>Quantidade</th>
+        </thead>
+        <tbody>
+          {productsInfo?.map((p) => {
+            return (
+              <tr>
+                <td>{p.id}</td>
+                <td>{p.product}</td>
+                <td>{p.quantity}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </>
+  );
+}
 
 export default Form;

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 
 const usersInfo = [];
 let id = 1;
@@ -16,30 +16,15 @@ function FormClients() {
   const [userAddressCity, setuserAddressCity] = useState("");
   const [userAddressState, setuserAddressState] = useState("");
   const [userAddressCountry, setuserAddressCountry] = useState("");
+  const [id, setId] = useState(0);
+  const [usersInfo, setUsersInfo] = useState(undefined);
+
+  const fullAddress = `${userAddress}, ${userAddressNumber}, ${userAddressComplement}, ${userAddressNeighborhood}, ${userAddressZipcode}, ${userAddressCity}, ${userAddressState}, ${userAddressCountry}`
  
 
   function handleForm(e) {
     e.preventDefault();
-    let userName = document.querySelector("#userName").value;
-    let userEmail = document.querySelector("#userEmail").value;
-    let userAddress = document.querySelector("#userAddress").value;
-    let createTR = document.createElement("tr");
-    let createTdId = document.createElement("td");
-    createTdId.innerHTML = id;
-    let createTdName = document.createElement("td");
-    createTdName.innerHTML = userName;
-    let createTdEmail = document.createElement("td");
-    createTdEmail.innerHTML = userEmail;
-    let createTdAddress = document.createElement("td");
-    createTdAddress.innerHTML = `${userAddress}, ${userAddressNumber}, ${userAddressComplement}, ${userAddressNeighborhood}, ${userAddressZipcode}, ${userAddressCity}, ${userAddressState}, ${userAddressCountry}`;
- 
-    let tableBody = document.querySelector("tbody");
-    tableBody.appendChild(createTR);
-    createTR.appendChild(createTdId);
-    createTR.appendChild(createTdName);
-    createTR.appendChild(createTdEmail);
-    createTR.appendChild(createTdAddress);
-   
+
     let userInfo = {
       id: id,
       name: userName,
@@ -51,12 +36,15 @@ function FormClients() {
       zipcode: userAddressZipcode,
       city: userAddressCity,
       state: userAddressState,
-      country: userAddressCountry
+      country: userAddressCountry,
+      fullAddress: fullAddress
     }
 
-    id = id + 1;
-    usersInfo.push(userInfo);
-    localStorage.setItem("Clientes: ", JSON.stringify(usersInfo));
+    setId((previousId) => previousId + 1);
+    setUsersInfo((previousUsersInfo) => [
+      ...(previousUsersInfo ?? []),
+      userInfo,
+    ]);
 
     setuserName("");
     setuserEmail("");
@@ -68,8 +56,26 @@ function FormClients() {
     setuserAddressCity("");
     setuserAddressState("");
     setuserAddressCountry("");
-
   }
+
+  useEffect(() => {
+    const clients = JSON.parse(localStorage.getItem("Clients:") ?? "[]");
+    setUsersInfo(clients);
+    let maxId = -1;
+    clients.forEach((c) => {
+      if (c.id > maxId) {
+        maxId = c.id;
+      }
+    });
+    setId(maxId + 1);
+  }, []);
+
+  useEffect(() => {
+    if (usersInfo === undefined) {
+      return;
+    }
+    localStorage.setItem("Clients:", JSON.stringify(usersInfo));
+  }, [usersInfo]);
 
     return (
         <>
@@ -197,7 +203,16 @@ function FormClients() {
       <th>Endereço do cliente</th>
   </thead>
   <tbody>
-
+  {usersInfo?.map((c) => {
+            return (
+              <tr>
+                <td>{c.id}</td>
+                <td>{c.name}</td>
+                <td>{c.email}</td>
+                <td>{c.fullAddress}</td>
+              </tr>
+            );
+          })}
   </tbody>
 </table>
 </>

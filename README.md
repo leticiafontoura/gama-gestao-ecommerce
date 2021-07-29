@@ -23,4 +23,4 @@ Para iniciar o projeto, é só digitar o comando `npm i` para instalar as depend
 
 # For the future
 
-Como pontos de melhoria a serem adicionados conforme meu conhecimento escalar, quero fazer com que seja possível editar/deletar os dados, tanto da tabela quanto do local storage, e também não perder os dados na tabela ao mudar de tela ou reiniciar a página.
+Como pontos de melhoria a serem adicionados conforme meu conhecimento escalar, quero fazer com que seja possível editar/deletar os dados, tanto da tabela quanto do local storage, ~~e também não perder os dados na tabela ao mudar de tela ou reiniciar a página~~ <- funcionalidade implementada.
